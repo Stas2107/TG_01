@@ -5,6 +5,7 @@ from aiogram.types import Message, FSInputFile
 import random
 import aiohttp
 from gtts import gTTS
+from googletrans import Translator
 
 
 import os
@@ -14,6 +15,7 @@ from config import TOKEN, WEATHER
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
+translator = Translator()
 
 @dp.message(Command(commands=['weather']))
 async def weather(message: Message):
@@ -91,7 +93,7 @@ async def react_photo(message: Message):
     list = ['Ого, какая фотка!', 'Непонятно, что это такое', 'Не отправляй мне такое больше']
     rand_answ = random.choice(list)
     await message.answer(rand_answ)
-    await bot.download(message.photo[-1], destination=f'tmp/{message.photo[-1].file_id}.jpg')
+    await bot.download(message.photo[-1], destination=f'img/{message.photo[-1].file_id}.jpg')
 
 @dp.message(F.text == "что такое ИИ?")
 async def aitext(message: Message):
@@ -108,8 +110,11 @@ async def start(message: Message):
 
 
 @dp.message()
-async def start(message: Message):
-    await message.send_copy(chat_id=message.chat.id)
+# async def start(message: Message):
+#     await message.send_copy(chat_id=message.chat.id)
+async def translate_message(message: Message):
+    translated_text = translator.translate(message.text, dest='en').text
+    await message.answer(translated_text)
 
 
 
