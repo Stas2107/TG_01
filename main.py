@@ -11,9 +11,9 @@ import keyboards as kb
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
-@dp.message(F.text.startswith("Links"))
-async def greet_button(message: Message):
-    await message.answer(f'Привет {message.from_user.first_name}!')
+@dp.message(Command('Links'))
+async def help(message: Message):
+    await message.answer("Этот бот умеет выполнять команды: \n /start \n /help")
 
 @dp.callback_query(F.data == 'news')
 async def news(callback: CallbackQuery):
