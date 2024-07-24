@@ -1,10 +1,12 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
-main = ReplyKeyboardMarkup(keyboard=[
-   [KeyboardButton(text="Тестовая кнопка 1")],
-   [KeyboardButton(text="Тестовая кнопка 2"), KeyboardButton(text="Тестовая кнопка 3")]
-], resize_keyboard=True)
+def create_main_keyboard(user_first_name: str) -> ReplyKeyboardMarkup:
+    main = ReplyKeyboardMarkup(keyboard=[
+       [KeyboardButton(text=f"Привет {user_first_name}")],
+       [KeyboardButton(text=f"Пока {user_first_name}")]
+    ], resize_keyboard=True)
+    return main
 
 inline_keyboard_test = InlineKeyboardMarkup(inline_keyboard=[
    [InlineKeyboardButton(text="Каталог", callback_data='catalog')],
@@ -13,14 +15,9 @@ inline_keyboard_test = InlineKeyboardMarkup(inline_keyboard=[
 ])
 
 test = ["кнопка 1", "кнопка 2", "кнопка 3", "кнопка 4"]
-# async def test_keyboard():
-#    keyboard = InlineKeyboardBuilder()
-#    for key in test:
-#        keyboard.add(KeyboardButton(text=key))
-#    return keyboard.adjust(2).as_markup()
 
 async def test_keyboard():
-   keyboard = InlineKeyboardBuilder()
-   for key in test:
-       keyboard.add(InlineKeyboardButton(text=key, url='https://www.youtube.com/watch?v=HfaIcB4Ogxk'))
-   return keyboard.adjust(2).as_markup()
+    keyboard = InlineKeyboardBuilder()
+    for key in test:
+        keyboard.add(InlineKeyboardButton(text=key, url='https://www.youtube.com'))
+    return keyboard.adjust(2).as_markup()
