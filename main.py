@@ -1,7 +1,7 @@
 import asyncio
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import CommandStart, Command
-from aiogram.types import Message, FSInputFile
+from aiogram.types import Message, FSInputFile, CallbackQuery
 import random
 import aiohttp
 from gtts import gTTS
@@ -11,11 +11,31 @@ from googletrans import Translator
 import os
 
 from config import TOKEN, WEATHER
+import keyboards as kb
 
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 translator = Translator()
+
+
+@dp.callback_query(F.data == 'news')
+async def news(callback: CallbackQuery):
+   await callback.answer("Новости подгружаются", show_alert=True)
+   await callback.message.edit_text('Вот свежие новости!', reply_markup=await kb.test_keyboard())
+
+@dp.message(F.text == "Тестовая кнопка 1")
+async def test_button(message: Message):
+   await message.answer('Обработка нажатия на reply кнопку')
+
+
+
+
+
+
+
+
+
 
 @dp.message(Command(commands=['weather']))
 async def weather(message: Message):
@@ -32,8 +52,6 @@ async def get_weather():
             temp = data['main']['temp']
             feels_like = data['main']['feels_like']
             return f"Погода в Москве: {description}\nТемпература: {temp}°C\nОщущается как: {feels_like}°C"
-
-
 
 
 @dp.message(Command('doc'))
@@ -105,7 +123,7 @@ async def help(message: Message):
 
 @dp.message(CommandStart())
 async def start(message: Message):
-    await message.answer(f"Приветики, {message.from_user.first_name}!")
+    await message.answer(f"Приветики, {message.from_user.first_name}!", reply_markup=kb.inline_keyboard_test)
 
 
 
