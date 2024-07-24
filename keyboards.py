@@ -1,5 +1,5 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
-from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 def create_main_keyboard(user_first_name: str) -> ReplyKeyboardMarkup:
     main = ReplyKeyboardMarkup(keyboard=[
@@ -14,10 +14,15 @@ inline_keyboard_test = InlineKeyboardMarkup(inline_keyboard=[
    [InlineKeyboardButton(text="Видео", callback_data='video')]
 ])
 
-test = ["кнопка 1", "кнопка 2", "кнопка 3", "кнопка 4"]
+def inline_dynamic_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="Показать больше", callback_data='show_more')]
+    ])
 
-async def test_keyboard():
+test = ["Опция 1", "Опция 2"]
+
+async def dinamic_keyboard():
     keyboard = InlineKeyboardBuilder()
-    for key in test:
-        keyboard.add(InlineKeyboardButton(text=key, url='https://www.youtube.com'))
+    for i, key in enumerate(test, start=1):
+        keyboard.add(InlineKeyboardButton(text=key, callback_data=f'option_{i}'))
     return keyboard.adjust(2).as_markup()
